@@ -20,7 +20,7 @@ class OnRetryConnection extends Interceptor {
       try {
         request.scheduleRequestRetry(err.requestOptions);
       } catch (e) {
-        handler.next(err.error as DioException);
+        handler.next(err.error! as DioException);
       }
     } else {
       handler.reject(err);
@@ -30,7 +30,7 @@ class OnRetryConnection extends Interceptor {
   /// when should retry
   bool _shouldRetry(DioException error) {
     final status = error.type != DioExceptionType.cancel &&
-        error.type == DioExceptionType.badResponse;
+        error.type != DioExceptionType.badResponse;
     if (_isTimeOut(error)) {
       onTimeOut!();
     }
