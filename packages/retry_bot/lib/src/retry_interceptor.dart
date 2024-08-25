@@ -15,12 +15,12 @@ class OnRetryConnection extends Interceptor {
 
   /// handle your error
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     if (_shouldRetry(err)) {
       try {
         request.scheduleRequestRetry(err.requestOptions);
       } catch (e) {
-        handler.next(err.error as DioError);
+        handler.next(err.error as DioException);
       }
     } else {
       handler.reject(err);
@@ -28,9 +28,9 @@ class OnRetryConnection extends Interceptor {
   }
 
   /// when should retry
-  bool _shouldRetry(DioError error) {
-    final status = error.type != DioErrorType.cancel &&
-        error.type != DioErrorType.response;
+  bool _shouldRetry(DioException error) {
+    final status = error.type != DioExceptionType.cancel &&
+        error.type == DioExceptionType.badResponse;
     if (_isTimeOut(error)) {
       onTimeOut!();
     }
@@ -38,8 +38,8 @@ class OnRetryConnection extends Interceptor {
   }
 
   /// timeout condition
-  bool _isTimeOut(DioError error) =>
-      error.type == DioErrorType.connectTimeout ||
-      error.type == DioErrorType.sendTimeout ||
-      error.type == DioErrorType.receiveTimeout;
+  bool _isTimeOut(DioException error) =>
+      error.type == DioExceptionType.connectionTimeout ||
+      error.type == DioExceptionType.sendTimeout ||
+      error.type == DioExceptionType.receiveTimeout;
 }
