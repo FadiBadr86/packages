@@ -42,5 +42,6 @@ class OnRetryConnection extends Interceptor {
   bool _isTimeOut(DioException error) =>
       error.type == DioExceptionType.connectionTimeout ||
       error.type == DioExceptionType.sendTimeout ||
-      error.type == DioExceptionType.receiveTimeout;
+      error.type == DioExceptionType.receiveTimeout ||
+      error.type == DioExceptionType.connectionError;
 }
