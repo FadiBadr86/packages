@@ -16,8 +16,6 @@ class OnRetryConnection extends Interceptor {
   /// handle your error
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-        print("onError: $err");
-
     if (_shouldRetry(err)) {
       try {
         request.scheduleRequestRetry(err.requestOptions);
@@ -43,5 +41,6 @@ class OnRetryConnection extends Interceptor {
   bool _isTimeOut(DioException error) =>
       error.type == DioExceptionType.connectionTimeout ||
       error.type == DioExceptionType.sendTimeout ||
-      error.type == DioExceptionType.receiveTimeout;
+      error.type == DioExceptionType.receiveTimeout ||
+      error.type == DioExceptionType.connectionError;
 }
