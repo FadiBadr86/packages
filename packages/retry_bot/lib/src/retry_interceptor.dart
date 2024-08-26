@@ -16,6 +16,7 @@ class OnRetryConnection extends Interceptor {
   /// handle your error
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
+    print("onError: $err");
     if (_shouldRetry(err)) {
       try {
         request.scheduleRequestRetry(err.requestOptions);
